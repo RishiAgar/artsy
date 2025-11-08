@@ -1,0 +1,19 @@
+{
+	"css.validate": false,
+	"less.validate": false,
+	"scss.validate": false,
+	"editor.formatOnSave": true,
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": "explicit",
+		"source.fixAll.stylelint": "explicit"
+	},
+	"stylelint.validate": ["css", "less", "scss", "postcss"],
+	"tailwindCSS.includeLanguages": {
+		"html": "html",
+		"javascript": "javascript",
+		"css": "css"
+	},
+	"editor.quickSuggestions": {
+		"strings": true
+	}
+}

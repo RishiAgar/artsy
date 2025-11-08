@@ -1,0 +1,51 @@
+[
+    {
+        "category": "Beauty & Personal Care",
+        "items": [
+            { "category": "beauty", "label": "Beauty", "icon": "sparkles" },
+            { "category": "skin-care", "label": "Skin Care", "icon": "droplet" },
+            { "category": "fragrances", "label": "Fragrances", "icon": "flower-2" }
+        ]
+    },
+    {
+        "category": "Fashion & Accessories",
+        "items": [
+            { "category": "mens-shirts", "label": "Men Shirts", "icon": "shirt" },
+            { "category": "mens-shoes", "label": "Men Shoes", "icon": "footprints" },
+            { "category": "mens-watches", "label": "Men Watches", "icon": "watch" },
+            { "category": "womens-dresses", "label": "Women Dresses", "icon": "shirt" },
+            { "category": "womens-shoes", "label": "Women Shoes", "icon": "footprints" },
+            { "category": "womens-bags", "label": "Women Bags", "icon": "shopping-bag" },
+            { "category": "womens-jewellery", "label": "Women Jewellery", "icon": "gem" },
+            { "category": "womens-watches", "label": "Women Watches", "icon": "watch" },
+            { "category": "tops", "label": "Tops", "icon": "shirt" },
+            { "category": "sunglasses", "label": "Sunglasses", "icon": "glasses" }
+        ]
+    },
+    {
+        "category": "Electronics & Mobile",
+        "items": [
+            { "category": "smartphones", "label": "Smartphones", "icon": "smartphone" },
+            { "category": "tablets", "label": "Tablets", "icon": "tablet" },
+            { "category": "laptops", "label": "Laptops", "icon": "laptop" },
+            { "category": "mobile-accessories", "label": "Mobile Accessories", "icon": "plug" }
+        ]
+    },
+    {
+        "category": "Home & Living",
+        "items": [
+            { "category": "furniture", "label": "Furniture", "icon": "sofa" },
+            { "category": "home-decoration", "label": "Home Decoration", "icon": "lamp" },
+            { "category": "kitchen-accessories", "label": "Kitchen Accessories", "icon": "utensils-crossed" },
+            { "category": "groceries", "label": "Groceries", "icon": "apple" }
+        ]
+    },
+    {
+        "category": "Automotive & Sports",
+        "items": [
+            { "category": "vehicle", "label": "Vehicle", "icon": "car" },
+            { "category": "motorcycle", "label": "Motorcycle", "icon": "bike" },
+            { "category": "sports-accessories", "label": "Sports Accessories", "icon": "dumbbell" }
+        ]
+    }
+]
