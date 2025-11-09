@@ -9,6 +9,20 @@ const nextConfig = {
             hostname: 'cdn.dummyjson.com',
         }],
     },
+    async redirects() {
+        return [
+            {
+                source: '/products',
+                destination: '/',
+                permanent: true,
+            },
+            {
+                source: '/products/',
+                destination: '/',
+                permanent: true,
+            },
+        ];
+    },
 };
 
 export default nextConfig;

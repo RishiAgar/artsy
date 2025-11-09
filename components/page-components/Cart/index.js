@@ -24,7 +24,7 @@ const PageCart = () => {
     const hasItems = cartItemCount > 0;
 
     const browseCollections = () => {
-        router.push('/products');
+        router.push('/');
     }
 
     return (

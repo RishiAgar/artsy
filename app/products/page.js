@@ -4,7 +4,7 @@ export const revalidate = 300;
 
 const DEFAULT_SKIP = 24;
 
-const PAGE_URL = `${process.env.NEXT_PUBLIC_WEBSITE_ADDRESS}/products`;
+const PAGE_URL = `${process.env.NEXT_PUBLIC_WEBSITE_ADDRESS}`;
 
 export async function generateMetadata({ searchParams }) {
     const sp = await searchParams;

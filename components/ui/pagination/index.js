@@ -38,7 +38,7 @@ const buildPaginationRange = (page, totalPages) => {
 };
 
 const CustomPagination = ({ page, totalPages, hideSinglePage, className }) => {
-    const pathname = usePathname() || "/products";
+    const pathname = usePathname() || "/";
     const searchParams = useSearchParams();
 
     if ( totalPages === 1 && hideSinglePage ) {

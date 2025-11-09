@@ -23,7 +23,7 @@ const SortBySelect = () => {
     const handleSortBy = value => {
         const [ sortBy, order ] = value.split("::");
 
-        router.push(`/products?sortBy=${sortBy}&order=${order}`);
+        router.push(`/?sortBy=${sortBy}&order=${order}`);
     }
 
     return (

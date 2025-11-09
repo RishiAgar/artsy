@@ -35,7 +35,7 @@ const NavBar = () => {
                             <Menu className="h-5 w-5" />
                         </button>
 
-                        <Link href="/products" className="text-xl font-semibold tracking-tight">
+                        <Link href="/" className="text-xl font-semibold tracking-tight">
                             Artsy
                         </Link>
                     </div>

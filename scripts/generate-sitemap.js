@@ -213,7 +213,6 @@ async function generateSitemap() {
     const urls = new Map();
 
     addUrl(urls, { path: '/', priority: '1.0', changefreq: 'weekly' });
-    addUrl(urls, { path: '/products', priority: '0.9', changefreq: 'daily' });
 
     for (const category of categories) {
         console.info(`Processing category "${category}"...`);

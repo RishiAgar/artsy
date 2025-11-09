@@ -8,7 +8,7 @@ const NotFoundPage = () => {
     const router = useRouter();
 
     const goToProducts = () => {
-        router.push('/products');
+        router.push('/');
     };
 
     return (

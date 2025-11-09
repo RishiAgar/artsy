@@ -8,7 +8,7 @@ const NoProducts = ({ total }) => {
     const router = useRouter();
 
     const browseCollections = () => {
-        router.push('/products');
+        router.push('/');
     }
 
     if (total > 0) {
