@@ -33,7 +33,7 @@ const CartItem = ({ item, onUpdateQuantity, onRemove }) => {
                 <div className="flex flex-col gap-2 md:flex-row md:items-start">
                     <div className="flex-1">
                         <Link
-                            href={`/products/${product.category}/${product.id}`}
+                            href={`/products/${product.id}`}
                             className="text-lg font-medium text-foreground transition hover:text-orange-500"
                         >
                             {product.title}

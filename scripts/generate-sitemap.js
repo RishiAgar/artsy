@@ -181,14 +181,14 @@ const fetchCategoryProducts = async (category) => {
     return products;
 };
 
-const toCategoryPath = (category) => `/products/${encodeURIComponent(category)}`;
+const toCategoryPath = (category) => `/categories/${encodeURIComponent(category)}`;
 const toProductPath = (product, fallbackCategory) => {
     const category = product?.category || fallbackCategory;
     if (!category || !product?.id) {
         return null;
     }
 
-    return `/products/${encodeURIComponent(category)}/${product.id}`;
+    return `/products/${product.id}`;
 };
 
 const buildUrlXml = ({ loc, lastmod, changefreq, priority }) => {

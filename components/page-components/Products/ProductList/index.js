@@ -12,7 +12,7 @@ const ProductList = ({ products }) => {
                 products.map(product => (
                     <Link
                         key={product.id}
-                        href={`/products/${product.category}/${product.id}`}
+                        href={`/products/${product.id}`}
                     >
                         <Card
                             className="group flex flex-col overflow-hidden border border-border/70 hover:border-primary/60 hover:shadow-md transition-all"
