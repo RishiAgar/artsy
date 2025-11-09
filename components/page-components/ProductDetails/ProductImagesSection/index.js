@@ -12,31 +12,33 @@ const ProductImagesSection = ({ title, images }) => {
     const moreThanOne = images.length > 1;
 
     return (
-        <Carousel className="w-full">
-            <CarouselContent>
-                {images.map(x => (
-                    <CarouselItem key={x}>
-                        <div className="relative aspect-[1/1] w-full overflow-hidden bg-muted">
-                            <Image
-                                src={x}
-                                alt={title}
-                                fill
-                                className="object-cover transition-transform duration-300 group-hover:scale-105"
-                            />
-                        </div>
-                    </CarouselItem>
-                ))}
-            </CarouselContent>
+        <div className="flex h-full items-center justify-center px-4 py-8 sm:px-10 lg:px-16">
+            <Carousel className="w-full max-w-[520px]">
+                <CarouselContent>
+                    {images.map(x => (
+                        <CarouselItem key={x} className="group">
+                            <div className="relative aspect-square w-full overflow-hidden rounded-3xl bg-muted">
+                                <Image
+                                    src={x}
+                                    alt={title}
+                                    fill
+                                    className="object-contain p-6 sm:p-10 transition-transform duration-300 group-hover:scale-105"
+                                />
+                            </div>
+                        </CarouselItem>
+                    ))}
+                </CarouselContent>
 
-            {
-                !moreThanOne ? null : (
-                    <>
-                        <CarouselPrevious className="ml-[80px]" />
-                        <CarouselNext className="mr-[80px]" />
-                    </>
-                )
-            }
-        </Carousel>
+                {
+                    !moreThanOne ? null : (
+                        <>
+                            <CarouselPrevious className="!left-6 md:!left-12" />
+                            <CarouselNext className="!right-6 md:!right-12" />
+                        </>
+                    )
+                }
+            </Carousel>
+        </div>
     );
 }
 

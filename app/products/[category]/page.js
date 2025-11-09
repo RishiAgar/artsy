@@ -36,6 +36,9 @@ export default async function CagegoriesPage({ searchParams, params }) {
     const limit = Math.max(1, Number(sp?.limit || DEFAULT_SKIP));
     const category = p?.category;
 
+    const sortBy = sp?.sortBy;
+    const order = sp?.order;
+
     const skip = (page - 1) * limit;
 
     const categoryObj = findByCategoryKey(p?.category);
@@ -50,6 +53,8 @@ export default async function CagegoriesPage({ searchParams, params }) {
             skip,
             limit,
             category,
+            sortBy,
+            order,
         },
         options: {
             next: {

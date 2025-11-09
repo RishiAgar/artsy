@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 
 import {
     Select,
@@ -19,11 +19,12 @@ const SORT_LIST = [
 
 const SortBySelect = () => {
     const router = useRouter();
+    const pathname = usePathname();
 
     const handleSortBy = value => {
         const [ sortBy, order ] = value.split("::");
 
-        router.push(`/?sortBy=${sortBy}&order=${order}`);
+        router.push(`${pathname}?sortBy=${sortBy}&order=${order}`);
     }
 
     return (

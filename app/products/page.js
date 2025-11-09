@@ -29,6 +29,9 @@ export default async function ProductsPage({ searchParams }) {
     const limit = Math.max(1, Number(sp?.limit || DEFAULT_SKIP));
     const category = sp?.category;
 
+    const sortBy = sp?.sortBy;
+    const order = sp?.order;
+
     const skip = (page - 1) * limit;
 
     const data = await serverGet({
@@ -37,6 +40,8 @@ export default async function ProductsPage({ searchParams }) {
             skip,
             limit,
             category,
+            sortBy,
+            order,
         },
     });
 
