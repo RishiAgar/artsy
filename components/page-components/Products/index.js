@@ -8,7 +8,7 @@ const Products = ({ products, total, page, limit, category = {} }) => {
     const totalPages = Math.max(1, Math.ceil(total / limit));
 
     return (
-        <div style={{ padding: '48px 24px', maxWidth: 1280, margin: '0 auto' }}>
+        <div className="mx-auto max-w-[1280px] px-6 py-12">
             <Header
                 title={category.label || "All Artsy Products"}
                 total={total}
