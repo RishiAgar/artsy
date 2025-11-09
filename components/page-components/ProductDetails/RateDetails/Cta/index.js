@@ -16,13 +16,17 @@ import { useCart } from "@/components/providers/CartProvider";
 
 const Cta = ({ product }) => {
     const totalStock = Math.max(0, product.stock || 0);
-    const minQuantity = Math.max(1, product.minimumOrderQuantity || 1);
+    const minimumOrderQuantity = Math.max(1, product.minimumOrderQuantity || 1);
 
     const { addItem, cartItems, cartItemCount, openCartPopover } = useCart();
 
     const existingCartItem = cartItems.find(item => item.product?.id === product.id);
     const existingQuantity = existingCartItem?.quantity || 0;
     const remainingStock = Math.max(0, totalStock - existingQuantity);
+
+    const minQuantity = existingQuantity >= minimumOrderQuantity
+        ? 1
+        : Math.max(1, minimumOrderQuantity - existingQuantity);
  
     const canAddMore = isProductInStock(product.availabilityStatus, minQuantity, remainingStock);
 

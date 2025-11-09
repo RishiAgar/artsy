@@ -1,48 +1,41 @@
 'use client';
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 
 import {
     cartItems as CART_ITEMS_STORAGE_KEY,
-    cartLastUpdated as CART_LAST_UPDATED_KEY,
 } from "@/helpers/constants/localStorageKeys";
-import { getValue, removeValue, setValue } from "@/helpers/utils/localStorage";
+import { getValue, setValue } from "@/helpers/utils/localStorage";
 
 const CartContext = createContext(undefined);
 
-const DEFAULT_POPOVER_AUTO_CLOSE = 6000000;
+const DEFAULT_POPOVER_AUTO_CLOSE = 6000;
 
-const getInitialCartState = () => {
-    const storedItems = getValue(CART_ITEMS_STORAGE_KEY);
-    const safeItems = Array.isArray(storedItems) ? storedItems : [];
+const normalizeCartItems = (items) => (Array.isArray(items) ? items : []);
 
-    return {
-        items: safeItems,
-        lastUpdated: getValue(CART_LAST_UPDATED_KEY),
-    };
+const readStoredCartItems = () => normalizeCartItems(getValue(CART_ITEMS_STORAGE_KEY));
+
+const persistCartItems = (items) => {
+    setValue(CART_ITEMS_STORAGE_KEY, normalizeCartItems(items));
 };
 
-const createEmptyCartState = () => ({
-    items: [],
-    lastUpdated: null,
-});
-
 const CartProvider = ({ children }) => {
-    const [state, setState] = useState(createEmptyCartState);
+    const [items, setItemsState] = useState(readStoredCartItems);
     const [popoverState, setPopoverState] = useState({
         isOpen: false,
         data: null,
         updatedAt: 0,
+        pathname: null,
     });
     const shouldPersistRef = useRef(false);
     const pathname = usePathname();
 
-    const closeCartPopover = useCallback(() => {
+    const closeCartPopover = () => {
         setPopoverState((prev) => (prev.isOpen ? { ...prev, isOpen: false } : prev));
-    }, []);
+    };
 
-    const openCartPopover = useCallback((payload) => {
+    const openCartPopover = (payload) => {
         if (!payload || !payload.product) {
             return;
         }
@@ -51,18 +44,9 @@ const CartProvider = ({ children }) => {
             isOpen: true,
             data: payload,
             updatedAt: Date.now(),
+            pathname,
         });
-    }, []);
-
-    const persistState = useCallback((items, lastUpdated) => {
-        setValue(CART_ITEMS_STORAGE_KEY, Array.isArray(items) ? items : []);
-
-        if (lastUpdated) {
-            setValue(CART_LAST_UPDATED_KEY, lastUpdated);
-        } else {
-            removeValue(CART_LAST_UPDATED_KEY);
-        }
-    }, []);
+    };
 
     useEffect(() => {
         if (!shouldPersistRef.current) {
@@ -70,24 +54,8 @@ const CartProvider = ({ children }) => {
             return;
         }
 
-        persistState(state.items, state.lastUpdated);
-    }, [persistState, state.items, state.lastUpdated]);
-
-    useEffect(() => {
-        const storedState = getInitialCartState();
-        const hasStoredItems = Array.isArray(storedState.items) && storedState.items.length > 0;
-        const hasStoredTimestamp = Boolean(storedState.lastUpdated);
-
-        if (!hasStoredItems && !hasStoredTimestamp) {
-            return;
-        }
-
-        shouldPersistRef.current = false;
-        setState({
-            items: Array.isArray(storedState.items) ? storedState.items : [],
-            lastUpdated: storedState.lastUpdated ?? null,
-        });
-    }, []);
+        persistCartItems(items);
+    }, [items]);
 
     useEffect(() => {
         if (typeof window === "undefined") {
@@ -103,10 +71,7 @@ const CartProvider = ({ children }) => {
                 const parsedItems = event.newValue ? JSON.parse(event.newValue) : [];
 
                 shouldPersistRef.current = false;
-                setState({
-                    items: Array.isArray(parsedItems) ? parsedItems : [],
-                    lastUpdated: getValue(CART_LAST_UPDATED_KEY),
-                });
+                setItemsState(normalizeCartItems(parsedItems));
             } catch (error) {
                 console.error("Failed to sync cart from storage event", error);
             }
@@ -119,44 +84,35 @@ const CartProvider = ({ children }) => {
         };
     }, []);
 
+    const popoverIsVisible =
+        Boolean(popoverState.isOpen) &&
+        Boolean(pathname) &&
+        popoverState.pathname === pathname;
+
     useEffect(() => {
-        if (!popoverState.isOpen || typeof window === "undefined") {
+        if (!popoverIsVisible || typeof window === "undefined") {
             return undefined;
         }
 
         const timer = window.setTimeout(() => {
-            closeCartPopover();
+            setPopoverState((prev) => (prev.isOpen ? { ...prev, isOpen: false } : prev));
         }, DEFAULT_POPOVER_AUTO_CLOSE);
 
         return () => {
             window.clearTimeout(timer);
         };
-    }, [closeCartPopover, popoverState.isOpen, popoverState.updatedAt]);
+    }, [popoverIsVisible, popoverState.updatedAt]);
 
-    useEffect(() => {
-        if (!pathname) {
-            return;
-        }
-
-        closeCartPopover();
-    }, [closeCartPopover, pathname]);
-
-    const setItems = useCallback((updater) => {
+    const setItems = (updater) => {
         shouldPersistRef.current = true;
-        setState((prevState) => {
-            const previousItems = prevState.items;
+        setItemsState((previousItems) => {
             const nextItems = typeof updater === "function" ? updater(previousItems) : updater;
-            const nextTimestamp = new Date().toISOString();
-            const normalizedItems = Array.isArray(nextItems) ? nextItems : [];
 
-            return {
-                items: normalizedItems,
-                lastUpdated: nextTimestamp,
-            };
+            return normalizeCartItems(nextItems);
         });
-    }, []);
+    };
 
-    const addItem = useCallback((product, quantity = 1) => {
+    const addItem = (product, quantity = 1) => {
         if (!product || typeof product.id === "undefined") {
             console.warn("Product needs an id to be added to the cart");
             return;
@@ -189,9 +145,9 @@ const CartProvider = ({ children }) => {
                 },
             ];
         });
-    }, [setItems]);
+    };
 
-    const updateItemQuantity = useCallback((productId, quantity) => {
+    const updateItemQuantity = (productId, quantity) => {
         if (typeof productId === "undefined") {
             return;
         }
@@ -203,66 +159,41 @@ const CartProvider = ({ children }) => {
             return;
         }
 
-        setItems((items) =>
-            items.map((item) =>
-                item.product?.id === productId
-                    ? {
-                        ...item,
-                        quantity: safeQuantity,
-                    }
-                    : item
-            )
-        );
-    }, [setItems]);
+        setItems((items) => items.map((item) => item.product?.id === productId ? {
+            ...item,
+            quantity: safeQuantity,
+        } : item
+        ));
+    };
 
-    const removeItem = useCallback((productId) => {
+    const removeItem = (productId) => {
         if (typeof productId === "undefined") {
             return;
         }
 
         setItems((items) => items.filter((item) => item.product?.id !== productId));
-    }, [setItems]);
+    };
 
-    const clearCart = useCallback(() => {
+    const clearCart = () => {
         setItems([]);
-    }, [setItems]);
+    };
 
-    const cartQuantityTotal = useMemo(() => {
-        return state.items.reduce((total, item) => total + (item.quantity || 0), 0);
-    }, [state.items]);
+    const cartItemCount = items.reduce((total, item) => total + (item.quantity || 0), 0);
 
-    const cartItemCount = useMemo(() => {
-        return state.items.reduce((total, item) => total + (item.quantity || 0), 0)
-    }, [state.items]);
-
-    const value = useMemo(() => ({
-        cartItems: state.items,
-        cartCount: cartQuantityTotal,
-        cartQuantityTotal,
+    const value = {
+        cartItems: items,
+        cartCount: cartItemCount,
+        cartQuantityTotal: cartItemCount,
         cartItemCount,
-        lastUpdated: state.lastUpdated,
         addItem,
         updateItemQuantity,
         removeItem,
         clearCart,
-        cartPopoverIsOpen: popoverState.isOpen,
-        cartPopoverData: popoverState.data,
+        cartPopoverIsOpen: popoverIsVisible,
+        cartPopoverData: popoverIsVisible ? popoverState.data : null,
         openCartPopover,
         closeCartPopover,
-    }), [
-        addItem,
-        cartItemCount,
-        cartQuantityTotal,
-        clearCart,
-        closeCartPopover,
-        openCartPopover,
-        popoverState.data,
-        popoverState.isOpen,
-        removeItem,
-        state.items,
-        state.lastUpdated,
-        updateItemQuantity,
-    ]);
+    };
 
     return (
         <CartContext.Provider value={value}>
