@@ -73,7 +73,6 @@ This will create/update the sitemap file(s) used for SEO.
 - **Modular structure**
 
   - Components are split by feature (e.g. page components, custom, hooks).
-  - Business logic extracted into hooks and helpers where possible.
 
 - **SEO-focused implementation**
 
@@ -84,7 +83,7 @@ This will create/update the sitemap file(s) used for SEO.
 
 - **Caching strategy**
 
-  - Server-side fetching designed with caching in mind (e.g. `cache` for shared fetchers where appropriate).
+  - Server-side fetching designed with caching in mind
   - Tries to avoid unnecessary refetches while still keeping data fresh enough for a product listing use case.
 
 - **React Compiler aware**
@@ -92,13 +91,6 @@ This will create/update the sitemap file(s) used for SEO.
   - Computations are kept pure and inside render when cheap, letting the compiler optimize.
 
 ### UX / Data Handling
-
-- **Cart behavior**
-
-  - Quantities in the cart respect:
-    - Minimum order quantity.
-    - Available stock.
-  - Local UI logic guards against selecting invalid quantities.
 
 - **LocalStorage usage**
   - Only stores **required data** to persist the cart across sessions.
@@ -112,13 +104,13 @@ Some intentional trade-offs and current limitations:
 
 - **Cart data vs. live product changes**
 
-  - Cart does **not** automatically revalidate items if:
+  - Cart does **not** revalidate items if:
     - A product expires.
     - A price changes.
   - This is due to the lack of a dedicated API for:
     - Validating current cart items.
     - Returning updated prices and availability in bulk.
-  - Result: validation happens primarily at the point of action (e.g. on add/update), not continuously.
+  - Result: validation happens primarily at time of adding items, not continuously.
 
 - **LocalStorage constraints**
 
@@ -128,7 +120,6 @@ Some intentional trade-offs and current limitations:
 - **Cross-browser testing**
 
   - Currently only **tested on Chrome**.
-  - No systematic testing on Safari, Firefox, Edge, or mobile browsers yet.
 
 - **Category listing data**
 
@@ -136,7 +127,6 @@ Some intentional trade-offs and current limitations:
   - A **hard-coded JSON** structure is used for:
     - Category labels.
     - Icons (lucide-react).
-  - This should ideally be moved to a dedicated API in the future.
 
 - **Testing & QA**
 
@@ -146,38 +136,6 @@ Some intentional trade-offs and current limitations:
 - **Accessibility**
   - Basic semantics come from shadcn + Radix primitives (which are accessibility-friendly by default).
   - No full accessibility audit has been performed yet (keyboard navigation, screen readers, color contrast, etc.).
-
----
-
-## Suggested Improvements / Future Work
-
-- Add a **cart validation API** to:
-
-  - Re-check price and availability on page load and before checkout.
-  - Return per-item error states (e.g. “product no longer available”, “price updated”).
-
-- Introduce **automated tests**:
-
-  - Unit tests for helpers and hooks (cart logic, quantity clamping, etc.).
-  - Integration tests for critical flows (add to cart, change quantity, etc.).
-  - E2E tests for core user journeys.
-
-- Improve **observability**:
-
-  - Add basic logging around API errors and cart failures.
-  - Optionally integrate a client-side error tracker (Sentry, etc.).
-
-- Replace hard-coded category metadata with:
-
-  - A proper **category API** supporting:
-    - Labels.
-    - Icons.
-    - Images.
-    - SEO slugs / descriptions.
-
-- Expand **cross-browser / device testing**:
-  - Desktop: Chrome, Firefox, Safari, Edge.
-  - Mobile: Chrome (Android), Safari (iOS).
 
 ---
 

@@ -81,6 +81,12 @@ const SITE_BASE = ensureAbsoluteUrl(process.env.NEXT_PUBLIC_WEBSITE_ADDRESS, DEF
 const OUTPUT_FILE = path.resolve(projectRoot, 'public', 'sitemap.xml');
 const CATEGORIES_FILE = path.resolve(projectRoot, 'helpers', 'constants', 'categories.json');
 const PRODUCTS_PER_REQUEST = 100;
+const LISTING_PAGE_SIZE = 24; // Keep in sync with DEFAULT_SKIP in app/page.js & app/categories/[category]/page.js
+
+const STATIC_ROUTES = [
+    { path: '/', priority: '1.0', changefreq: 'weekly' },
+    { path: '/cart', priority: '0.4', changefreq: 'weekly' },
+];
 
 if (typeof fetch !== 'function') {
     throw new Error('Global fetch is unavailable in this Node version. Please upgrade to Node 18 or newer.');
@@ -119,6 +125,26 @@ const addUrl = (collection, { path: pathOrUrl, loc, priority = '0.7', changefreq
         changefreq,
         lastmod: normalizeDate(lastmod),
     });
+};
+
+const addPaginatedUrls = (collection, { basePath, totalItems, pageSize = LISTING_PAGE_SIZE, priority, changefreq }) => {
+    if (!basePath || !Number.isFinite(totalItems) || totalItems <= 0) {
+        return;
+    }
+
+    const effectivePageSize = Number(pageSize) > 0 ? Number(pageSize) : LISTING_PAGE_SIZE;
+    if (totalItems <= effectivePageSize) {
+        return;
+    }
+
+    const totalPages = Math.ceil(totalItems / effectivePageSize);
+    for (let page = 2; page <= totalPages; page += 1) {
+        addUrl(collection, {
+            path: `${basePath}?page=${page}`,
+            priority,
+            changefreq,
+        });
+    }
 };
 
 const buildApiUrl = (pathname, params = {}) => {
@@ -211,14 +237,28 @@ async function generateSitemap() {
     }
 
     const urls = new Map();
+    const trackedProductIds = new Set();
 
-    addUrl(urls, { path: '/', priority: '1.0', changefreq: 'weekly' });
+    STATIC_ROUTES.forEach((route) => addUrl(urls, route));
 
     for (const category of categories) {
         console.info(`Processing category "${category}"...`);
-        addUrl(urls, { path: toCategoryPath(category), priority: '0.8', changefreq: 'weekly' });
+        const categoryPath = toCategoryPath(category);
+        addUrl(urls, { path: categoryPath, priority: '0.8', changefreq: 'weekly' });
 
         const products = await fetchCategoryProducts(category);
+        addPaginatedUrls(urls, {
+            basePath: categoryPath,
+            totalItems: products.length,
+            priority: '0.7',
+            changefreq: 'weekly',
+        });
+
+        products.forEach((product) => {
+            if (product?.id) {
+                trackedProductIds.add(product.id);
+            }
+        });
 
         for (const product of products) {
             const productPath = toProductPath(product, category);
@@ -234,6 +274,13 @@ async function generateSitemap() {
             });
         }
     }
+
+    addPaginatedUrls(urls, {
+        basePath: '/',
+        totalItems: trackedProductIds.size,
+        priority: '0.9',
+        changefreq: 'weekly',
+    });
 
     const xmlBody = [...urls.values()]
         .map((url) => buildUrlXml(url))
