@@ -24,7 +24,7 @@ export default function LoadingProductPage() {
     const items = Array.from({ length: 8 });
 
     return (
-        <div className="mx-auto w-full max-w-[1280px] px-6 py-12 md:px-10">
+        <div className="mx-auto w-full max-w-7xl px-6 py-12 md:px-10">
             <div className="mb-12 space-y-4">
                 <div className={`${shimmer} h-12 w-64`} />
 

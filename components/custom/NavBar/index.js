@@ -24,7 +24,7 @@ const NavBar = () => {
             <header
                 className="fixed left-0 right-0 top-0 z-50 w-full border-b bg-white"
             >
-                <div className="mx-auto flex w-full max-w-6xl items-center gap-4 px-4 py-4">
+                <div className="mx-auto flex w-full max-w-7xl items-center gap-4 px-6 py-4">
                     <div className="flex items-center gap-2">
                         <Button
                             type="button"

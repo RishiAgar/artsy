@@ -28,7 +28,7 @@ const PageCart = () => {
     }
 
     return (
-        <div className="mx-auto w-full max-w-6xl px-4 pb-16 pt-16 lg:pb-">
+        <div className="mx-auto w-full max-w-7xl px-6 py-16">
             <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-12">
                 <section className="flex-1 lg:pr-6">
                     <h1 className="text-[2.25rem] mb-6 uppercase sm:text-[3rem]">
