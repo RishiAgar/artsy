@@ -1,6 +1,7 @@
 import { CheckCircle2, X } from "lucide-react";
 
 import { DialogTitle } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 const Header = ({ onClose }) => {
     return (
@@ -11,14 +12,16 @@ const Header = ({ onClose }) => {
                     <span>Added to Cart</span>
                 </div>
 
-                <button
+                <Button
                     type="button"
+                    variant="ghost"
+                    size="icon"
                     onClick={onClose}
                     className="rounded-full border p-1 text-gray-500 transition hover:text-gray-900 hover:border-gray-900"
                     aria-label="Close cart update dialog"
                 >
                     <X className="h-4 w-4" />
-                </button>
+                </Button>
             </div>
         </DialogTitle>
     );

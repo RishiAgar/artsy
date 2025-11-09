@@ -8,6 +8,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 
 const Actions = ({ item, onUpdateQuantity, onRemove }) => {
     const product = item?.product;
@@ -57,14 +58,16 @@ const Actions = ({ item, onUpdateQuantity, onRemove }) => {
                 </SelectContent>
             </Select>
 
-            <button
+            <Button
                 type="button"
+                variant="ghost"
+                size="icon"
                 onClick={handleRemove}
                 className="text-muted-foreground transition hover:text-destructive"
                 aria-label="Remove item"
             >
                 <Trash2 className="h-5 w-5" />
-            </button>
+            </Button>
         </div>
     );
 };

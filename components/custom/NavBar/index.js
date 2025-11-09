@@ -8,6 +8,7 @@ import { Menu, ShoppingCart } from "lucide-react"
 import NavList from "./NavList"
 import CartPopover from "./CartPopover";
 import { useCart } from "@/components/providers/CartProvider";
+import { Button } from "@/components/ui/button";
 
 const MobileSidebar = dynamic(() => import('./MobileSidebar'), { ssr: false });
 
@@ -25,15 +26,17 @@ const NavBar = () => {
             >
                 <div className="mx-auto flex w-full max-w-6xl items-center gap-4 px-4 py-4">
                     <div className="flex items-center gap-2">
-                        <button
+                        <Button
                             type="button"
-                            className="inline-flex h-10 w-10 items-center justify-center rounded-full border text-foreground transition hover:bg-accent hover:text-accent-foreground lg:hidden"
+                            variant="ghost"
+                            size="icon"
+                            className="h-10 w-10 rounded-full border text-foreground transition hover:bg-accent hover:text-accent-foreground lg:hidden"
                             aria-label="Open menu"
                             aria-expanded={isMobileOpen}
                             onClick={() => setIsMobileOpen(true)}
                         >
                             <Menu className="h-5 w-5" />
-                        </button>
+                        </Button>
 
                         <Link href="/" className="text-xl font-semibold tracking-tight">
                             Artsy

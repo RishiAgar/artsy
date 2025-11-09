@@ -56,14 +56,16 @@ const Summary = ({ subtotal = 0, actualSubTotal = 0, hasItems, onClearCart }) =>
                 Checkout
             </Button>
 
-            <button
+            <Button
                 type="button"
+                variant="ghost"
+                size="sm"
                 onClick={handleClearCart}
                 disabled={!hasItems}
                 className="w-full text-center text-xs font-semibold uppercase text-muted-foreground underline decoration-dotted underline-offset-4 transition hover:text-destructive disabled:cursor-not-allowed disabled:opacity-70"
             >
                 Clear cart
-            </button>
+            </Button>
 
             <p className="text-xs leading-relaxed text-muted-foreground">
                 The price and availability of items at Artsy subject to change. The 
