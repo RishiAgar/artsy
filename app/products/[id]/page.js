@@ -27,7 +27,7 @@ export async function generateMetadata({ params }) {
     const p = await params;
     const product = await getProduct(p.id);
 
-    const canonical = `${PAGE_URL}/${product.category}/${p.id}`;
+    const canonical = `${PAGE_URL}/${p.id}`;
 
     const title = product?.title ? `${product.title} | Artsy` : 'Product | Artsy';
     const description = product?.description || `All products sold by Artsy for product`;
